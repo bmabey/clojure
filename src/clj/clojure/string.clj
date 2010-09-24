@@ -40,7 +40,7 @@ Design notes for clojure.string:
       :author "Stuart Sierra, Stuart Halloway, David Liebke"}
   clojure.string
   (:refer-clojure :exclude (replace reverse))
-  (:import (java.util.regex Pattern)
+  (:import (java.util.regex Pattern Matcher)
            clojure.lang.LazilyPersistentVector))
 
 (defn ^String reverse
@@ -55,7 +55,7 @@ Design notes for clojure.string:
     (let [buffer (StringBuffer. (.length s))]
       (loop []
         (if (.find m)
-          (do (.appendReplacement m buffer (f (re-groups m)))
+          (do (.appendReplacement m buffer (Matcher/quoteReplacement (f (re-groups m))))
               (recur))
           (do (.appendTail m buffer)
               (.toString buffer)))))))
@@ -87,7 +87,7 @@ Design notes for clojure.string:
   (let [m (re-matcher re s)]
     (let [buffer (StringBuffer. (.length s))]
       (if (.find m)
-        (let [rep (f (re-groups m))]
+        (let [rep (Matcher/quoteReplacement (f (re-groups m)))]
           (.appendReplacement m buffer rep)
           (.appendTail m buffer)
           (str buffer))))))
