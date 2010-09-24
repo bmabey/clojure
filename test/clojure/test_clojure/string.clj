@@ -13,6 +13,8 @@
 (deftest t-replace
   (is (= "faabar" (s/replace "foobar" \o \a)))
   (is (= "barbarbar" (s/replace "foobarfoo" "foo" "bar")))
+  (is (= "foo$" (s/replace "foobar" "bar" "$")))
+  (is (= "foo$" (s/replace "foobar" #"bar" "$")))
   (is (= "foo$" (s/replace "foobar" #"bar" (constantly "$"))))
   (is (= "FOObarFOO" (s/replace "foobarfoo" #"foo" s/upper-case))))
 
@@ -21,6 +23,7 @@
   (is (= "barbarfoo" (s/replace-first "foobarfoo" #"foo" "bar")))
   (is (= "z.ology" (s/replace-first "zoology" \o \.)))
   (is (= "foo$bar" (s/replace-first "foobarbar" #"bar" (constantly "$"))))
+  (is (= "foo$bar" (s/replace-first "foobarbar" #"bar" "$")))
   (is (= "FOObarfoo" (s/replace-first "foobarfoo" #"foo" s/upper-case))))
 
 (deftest t-join

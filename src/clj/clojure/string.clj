@@ -78,7 +78,7 @@ Design notes for clojure.string:
      (instance? CharSequence match) (.replace s ^CharSequence match ^CharSequence replacement)
      (instance? Pattern match) (if (instance? CharSequence replacement)
                                  (.replaceAll (re-matcher ^Pattern match s)
-                                              (.toString ^CharSequence replacement))
+                                              (Matcher/quoteReplacement (.toString ^CharSequence replacement)))
                                  (replace-by s match replacement))
      :else (throw (IllegalArgumentException. (str "Invalid match arg: " match))))))
 
@@ -122,7 +122,7 @@ Design notes for clojure.string:
      (instance? Pattern match)
      (if (instance? CharSequence replacement)
        (.replaceFirst (re-matcher ^Pattern match s)
-                      (.toString ^CharSequence replacement))
+                      (Matcher/quoteReplacement (.toString ^CharSequence replacement)))
        (replace-first-by s match replacement))
      :else (throw (IllegalArgumentException. (str "Invalid match arg: " match))))))
 
